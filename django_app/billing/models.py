@@ -1,5 +1,11 @@
+import hashlib
+import random
+from datetime import time
+
 from django.contrib.auth import get_user_model
 from django.db import models
+
+from . import iamport
 
 USER = get_user_model()
 
@@ -12,6 +18,50 @@ class Point(models.Model):
 
     def __str(self):
         return str(self.point)
+
+
+class PointTransactionManager(models.Manager):
+    # 새로운 트랜잭션 생성
+    def create_new(self, user, amount, type, success=None, transaction_status=None):
+        if not user:
+            raise ValueError("유저가 확인되지 않습니다.")
+        # 라이브러리 바르게 임포트했을지 의심되는 부분
+        short_hash = hashlib.sha1(str(random.random())).hexdigest()[:2]
+        time_hash = hashlib.sha1(str(int(time.time()))).hexdigest()[-3:]
+        base = str(USER.email).split("@")[0]
+        key = hashlib.sha1(short_hash + time_hash + base).hexdigest()[:10]
+        new_order_id = '%s' % (key)
+
+        iamport.validation_prepare(new_order_id, amount)
+
+        new_trans = self.model(
+            user=user,
+            order_id=new_order_id,
+            amount=amount,
+            type=type
+        )
+
+        if success is not None:
+            new_trans.success = success
+            new_trans.transaction_status = transaction_status
+
+        new_trans.save(using=self._db)
+        return new_trans.order_id
+
+    # 생성된 트랜잭션 검증
+    def validation_trans(self, merchant_id):
+        result = iamport.get_transaction(merchant_id)
+
+        if result['status'] is not 'paid':
+            return result
+        else:
+            return None
+
+    def all_for_user(self, user):
+        return super(PointTransactionManager, self).filter(user=user)
+
+    def get_recent_user(self, user, num):
+        return super(PointTransactionManager, self).filter(user=user)[:num]
 
 
 class PointTransaction(models.Model):
