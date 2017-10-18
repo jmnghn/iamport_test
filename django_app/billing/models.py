@@ -1,9 +1,10 @@
 import hashlib
 import random
-from datetime import time
+import time
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.signals import post_save
 
 from . import iamport
 
@@ -79,3 +80,28 @@ class PointTransaction(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
+def new_point_trans_validation(sender, instance, created, *args, **kwargs):
+    if instance.transaction_id:
+        # 거래 후 아임포트에서 넘긴 결과
+        v_trans = PointTransaction.objects.validation_trans(
+            merchant_id=instance.order_id
+        )
+
+        res_merchant_id = v_trans['merchnat_id']
+        res_imp_id = v_trans['imp_id']
+        res_amount = v_trans['amount']
+
+        # 데이터베이스에 실제 결제된 정보가 있는지 체크
+        r_trans = PointTransaction.objects.filter(
+            order_id=res_merchant_id,
+            transaction_id=res_imp_id,
+            amount=res_amount
+        ).exists()
+
+        if not v_trans or not r_trans:
+            raise ValueError("비정상적인 거래입니다.")
+
+
+post_save.connect(new_point_trans_validation, sender=PointTransaction)
