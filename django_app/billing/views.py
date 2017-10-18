@@ -67,6 +67,6 @@ class PointImpAjaxView(View):
 
 
 def charge_point(request):
-    template = 'charge.html'
+    template = 'billing/charge.html'
 
     return render(request, template)
