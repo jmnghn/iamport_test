@@ -27,11 +27,11 @@ class PointTransactionManager(models.Manager):
         if not user:
             raise ValueError("유저가 확인되지 않습니다.")
         # 라이브러리 바르게 임포트했을지 의심되는 부분
-        short_hash = hashlib.sha1(str(random.random())).hexdigest()[:2]
-        time_hash = hashlib.sha1(str(int(time.time()))).hexdigest()[-3:]
-        base = str(USER.email).split("@")[0]
-        key = hashlib.sha1(short_hash + time_hash + base).hexdigest()[:10]
-        new_order_id = '%s' % (key)
+        short_hash = hashlib.sha1(str(random.random()).encode()).hexdigest()[:2]
+        time_hash = hashlib.sha1(str(int(time.time())).encode()).hexdigest()[-3:]
+        base = str(user.email).split("@")[0]
+        key = hashlib.sha1(str(short_hash + time_hash + base).encode()).hexdigest()[:10]
+        new_order_id = "%s" % (key)
 
         iamport.validation_prepare(new_order_id, amount)
 
@@ -75,6 +75,8 @@ class PointTransaction(models.Model):
     type = models.CharField(max_length=120)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
 
+    objects = PointTransactionManager()
+
     def __str__(self):
         return self.order_id
 
@@ -89,7 +91,7 @@ def new_point_trans_validation(sender, instance, created, *args, **kwargs):
             merchant_id=instance.order_id
         )
 
-        res_merchant_id = v_trans['merchnat_id']
+        res_merchant_id = v_trans['merchant_id']
         res_imp_id = v_trans['imp_id']
         res_amount = v_trans['amount']
 
