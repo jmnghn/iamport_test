@@ -15,11 +15,12 @@ class PointCheckoutAjaxView(View):
         type = request.POST.get('type')
 
         try:
-            trnas = PointTransaction.objects.create_new(
+            trans = PointTransaction.objects.create_new(
                 user=user,
                 amount=amount,
                 type=type
             )
+            print("33" + trans)
         except:
             trans = None
 
@@ -28,6 +29,7 @@ class PointCheckoutAjaxView(View):
                 "works": True,
                 "merchant_id": trans
             }
+            print(data)
             return JsonResponse(data)
         else:
             return JsonResponse({}, status=401)
@@ -43,12 +45,18 @@ class PointImpAjaxView(View):
         imp_id = request.POST.get('imp_id')
         amount = request.POST.get('amount')
 
+        # print("@@@@@: " + user)
+        # print("@@@@@: " + merchant_id)
+        # print("@@@@@: " + imp_id)
+        # print("@@@@@: " + amount)
+
         try:
-            trnas = PointTransaction.objects.create_new(
+            trans = PointTransaction.objects.get(
                 user=user,
-                amount=amount,
-                type=type
+                order_id=merchant_id,
+                amount=amount
             )
+            # print("@@@@@: " + trans)
         except:
             trans = None
 
