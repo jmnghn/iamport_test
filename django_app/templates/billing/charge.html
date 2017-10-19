@@ -67,6 +67,8 @@
                 }
             });
             request.fail(function (jqXHR, textStatus) {
+                console.log(jqXHR)
+                console.log(textStatuss)
                 if (jqXHR.status == 404) {
                     alert("페이지가 존재하지 않습니다.");
                 } else if (jqXHR.status == 403) {
@@ -96,12 +98,13 @@
                 }
             });
             request.fail(function (jqXHR, textStatus) {
+                console.log(jqXHR)
                 if (jqXHR.status == 404) {
                     alert("페이지가 존재하지 않습니다.");
                 } else if (jqXHR.status == 403) {
                     alert("로그인 해주세요.");
                 } else {
-                    alert("문제가 발생했습니다. 다시 시도해주세요.");
+                    alert("문제가 발생했습니다. 다시 시도해주세요!");
                 }
             });
         }
@@ -138,7 +141,7 @@
     </div>
 </div>
 <div class="charge-total">
-    총 결제금액 <span id="total">1000원</span>
+    총 결제금액 <span id="total">10원</span>
 </div>
 <div class="charge-click">
     <button class="charge-button">충전하기</button>
