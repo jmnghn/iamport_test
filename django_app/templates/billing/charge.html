@@ -9,12 +9,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Iamport; 테스트</title>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.1.js"></script>
+    <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
     <script type="text/javascript">
         $(function(){
             var IMP = window.IMP;
-            // 가맹점 코드
-            IMP.init('imp84087686');
+            IMP.init('Your identifying code');
 
             $('.charge-button').on('click', function (e) {
                 var amount = parseInt($('.charge-total #total').text().replace(',', '').slice(0, -1));

@@ -22,11 +22,9 @@ class Point(models.Model):
 
 
 class PointTransactionManager(models.Manager):
-    # 새로운 트랜잭션 생성
     def create_new(self, user, amount, type, success=None, transaction_status=None):
         if not user:
             raise ValueError("유저가 확인되지 않습니다.")
-        # 라이브러리 바르게 임포트했을지 의심되는 부분
         short_hash = hashlib.sha1(str(random.random()).encode()).hexdigest()[:2]
         time_hash = hashlib.sha1(str(int(time.time())).encode()).hexdigest()[-3:]
         base = str(user.email).split("@")[0]
@@ -49,7 +47,6 @@ class PointTransactionManager(models.Manager):
         new_trans.save(using=self._db)
         return new_trans.order_id
 
-    # 생성된 트랜잭션 검증
     def validation_trans(self, merchant_id):
         result = iamport.get_transaction(merchant_id)
 
@@ -86,7 +83,6 @@ class PointTransaction(models.Model):
 
 def new_point_trans_validation(sender, instance, created, *args, **kwargs):
     if instance.transaction_id:
-        # 거래 후 아임포트에서 넘긴 결과
         v_trans = PointTransaction.objects.validation_trans(
             merchant_id=instance.order_id
         )
@@ -95,7 +91,6 @@ def new_point_trans_validation(sender, instance, created, *args, **kwargs):
         res_imp_id = v_trans['imp_id']
         res_amount = v_trans['amount']
 
-        # 데이터베이스에 실제 결제된 정보가 있는지 체크
         r_trans = PointTransaction.objects.filter(
             order_id=res_merchant_id,
             transaction_id=res_imp_id,
