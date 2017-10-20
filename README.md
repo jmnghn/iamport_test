@@ -54,9 +54,9 @@ IAMPORT_KEY = 'Your REST API KEY'
 IAMPORT_SECRET = 'Your REST API SECRET KEY'
 ```
 
-```
-javascript - 가맹점 식별코드
+**templates/billing/chare.html** 의 javascript에서 가맹점 식별코드 설정
 
+```
 $(function(){
             var IMP = window.IMP;
             IMP.init('Your identifying code');
