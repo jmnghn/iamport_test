@@ -6,7 +6,7 @@
 
 수정 사항 
 	
-- `“TypeError: Unicode-objects must be encoded before hashing”` 해결을 위해 `PointTransactionManager` 에 `encode()` 추가
+- `“TypeError: Unicode-objects must be encoded before hashing”` 해결을 위해 `models.py > PointTransactionManager` 에 `encode()` 추가
 
 #### `SECRET_KEY`를 보안을 위한 프로젝트 레이아웃
 
@@ -52,6 +52,16 @@ SECRET_KEY = config_secret_common['django']['secret_key']
 # iamport; API KEY
 IAMPORT_KEY = 'Your REST API KEY'
 IAMPORT_SECRET = 'Your REST API SECRET KEY'
+```
+
+```
+javascript - 가맹점 식별코드
+
+$(function(){
+            var IMP = window.IMP;
+            IMP.init('Your identifying code');
+            ...
+})
 ```
 
 <br>
