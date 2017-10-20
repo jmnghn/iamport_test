@@ -126,6 +126,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# i'mport API KEY
+# iamport API KEY
 IAMPORT_KEY = 'Your REST API KEY'
 IAMPORT_SECRET = 'Your REST API SECRET KEY'
