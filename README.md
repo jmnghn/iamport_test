@@ -4,11 +4,15 @@
 ](http://genius-project.postach.io/post/django-iamport-yeondonghagi-1) 를 보고 작성한 코드임을 밝힙니다.
 
 
-수정 사항 
+> [수정 사항]
 	
-- `“TypeError: Unicode-objects must be encoded before hashing”` 해결을 위해 `models.py > PointTransactionManager` 에 `encode()` 추가
+> 1. `“TypeError: Unicode-objects must be encoded before hashing”`에러 해결을 위해 `models.py > PointTransactionManager` 에 `encode()` 추가
 
-#### `REST API 키`, `REST API secret`, `Django SECRET_KEY` 보안을 위한 프로젝트 레이아웃
+> 2. 유저의 결제 시도 횟수를 저장하는 `Point` 모델의 point 필드 1씩 증가처리를 위한 코드 추가
+
+<br>
+
+`REST API 키`, `REST API secret`, `Django SECRET_KEY` 보안을 위한 프로젝트 레이아웃
 
 ```
 iamport_test
@@ -71,6 +75,27 @@ $(function(){
             ...
 })
 ```
+
+<br>
+
+#### Point, PointTransaction Model 추가
+
+- Point: 유저가 결제를 시도한 정보
+
+	| 필드 | 설명 |
+	| :--- | :--- |
+	| point | 결제를 시도 할 경우, point 필드 1씩 증가 |
+	
+	> User Table 과 One to One relation
+
+- PointTransaction: 결제 관련 정보
+
+	| 필드 | 설명 |
+	| :--- | :--- |
+	| imp_uid | 개별 결제건마다 아임포트 결제모듈에서 채번하는 고유한 ID |
+	| merchant_uid | 결제 요청시 가맹점에서 아임포트로 전달한 UID, 가맹점에서 지정한 UID이기 때문에 가맹점 서비스의 DB정보와 아임포트 서비스에 저장된 정보간의 비교를 할 때 사용할 수 있음 |
+
+	> User Table 과 Many to One relation
 
 <br>
 
