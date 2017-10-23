@@ -21,7 +21,7 @@ iamport_test
             └──...
 ```
 ```
-.config_secret/settings_common.json
+[.config_secret/settings_common.json]
 
 {
   "django": {
@@ -37,6 +37,10 @@ iamport_test
 **settings.py** 에서 **.config_secret/settings\_common.json** 파일의 `REST API 키`, `REST API secret`, `Django SECRET_KEY`를 가져오기 위한 경로 설정
 
 ```
+[config/settings.py]
+
+...
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
@@ -52,11 +56,15 @@ SECRET_KEY = config_secret_common['django']['secret_key']
 # iamport; API KEY
 IAMPORT_KEY = config_secret_common['iamport']['iamport_key']
 IAMPORT_SECRET = config_secret_common['iamport']['iamport_secret']
+
+...
 ```
 
-**templates/billing/chare.html** 의 javascript에서 `가맹점 식별코드` 설정
+**templates/billing/chare.html** 의 javascript에서 **가맹점 식별코드** 설정
 
 ```
+[templates/billing/charge.html]
+
 $(function(){
             var IMP = window.IMP;
             IMP.init('Your identifying code');
