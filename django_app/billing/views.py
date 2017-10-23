@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
 
-from .models import PointTransaction
+from .models import PointTransaction, Point
 
 
 class PointCheckoutAjaxView(View):
@@ -20,6 +20,13 @@ class PointCheckoutAjaxView(View):
                 amount=amount,
                 type=type
             )
+            try:
+                Point.objects.get(user=user)
+                point = Point.objects.get(user=user)
+                point.point += 1
+                point.save()
+            except:
+                Point.objects.create(user=user)
         except:
             trans = None
 
