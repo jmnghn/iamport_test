@@ -21,7 +21,6 @@ class PointCheckoutAjaxView(View):
                 type=type
             )
             try:
-                Point.objects.get(user=user)
                 point = Point.objects.get(user=user)
                 point.point += 1
                 point.save()
