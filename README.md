@@ -8,7 +8,7 @@
 	
 - `“TypeError: Unicode-objects must be encoded before hashing”` 해결을 위해 `models.py > PointTransactionManager` 에 `encode()` 추가
 
-#### `SECRET_KEY`를 보안을 위한 프로젝트 레이아웃
+#### `REST API 키`, `REST API secret`, `Django SECRET_KEY` 보안을 위한 프로젝트 레이아웃
 
 ```
 iamport_test
